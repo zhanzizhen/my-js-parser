@@ -1,0 +1,8 @@
+let sum = 1;
+
+function add(a){
+  sum = sum + a;
+}
+
+add(1);
+sum // 2
