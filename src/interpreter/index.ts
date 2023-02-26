@@ -13,6 +13,8 @@ import {
   V8IntrinsicIdentifier,
   BlockStatement,
   AssignmentExpression,
+  ArrayExpression,
+  MemberExpression,
 } from "@babel/types";
 
 import Env from "./Env";
@@ -52,6 +54,9 @@ export default class Interpreter {
         return env.set(node.id!.name, node);
       case "ExpressionStatement":
         return this.eval(node.expression, env);
+      case "StringLiteral":
+      case "BooleanLiteral":
+      case "BigIntLiteral":
       case "NumericLiteral":
         return node.value;
       case "Identifier":
@@ -64,9 +69,27 @@ export default class Interpreter {
         return this.evalBlockStatement(node, env);
       case "AssignmentExpression":
         return this.evalAssignmentExpression(node, env);
+      case "ArrayExpression":
+        return this.evalArrayExpression(node, env);
+      case "MemberExpression":
+        return this.evalMemberExpression(node, env);
       default:
-        throw Error("not implement");
+        throw Error(`not implement ${node.type}`);
     }
+  }
+  evalMemberExpression(node: MemberExpression, env: Env): any {
+    const { object, property } = node;
+    const obj = this.eval(object, env);
+    const prop = this.eval(property, env);
+    if (typeof obj[prop] === "function") {
+      return obj[prop].bind(obj);
+    }
+    return obj[prop];
+  }
+  evalArrayExpression(node: ArrayExpression, env: Env): any {
+    return node.elements.map((item) =>
+      item === null ? item : this.eval(item, env)
+    );
   }
   evalAssignmentExpression(node: AssignmentExpression, env: Env) {
     switch (node.operator) {
@@ -81,13 +104,7 @@ export default class Interpreter {
         throw Error("not implement");
     }
   }
-  // evalExpressionStatement(expression: Expression, env: Env) {
-  //   switch (expression.type) {
-  //     default:
-  //       debugger;
-  //       throw Error("not implement");
-  //   }
-  // }
+
   evalBinaryExpression(expression: BinaryExpression, env: Env) {
     const left = this.eval(expression.left, env);
     const right = this.eval(expression.right, env);

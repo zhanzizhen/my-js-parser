@@ -1,1 +1,0 @@
-{"version":3,"file":"initGlobal.js","sourceRoot":"","sources":["../../src/interpreter/initGlobal.ts"],"names":[],"mappings":";;AAGA,SAAwB,UAAU,CAAC,WAAgB;IACjD,MAAM,CAAC,IAAI,CAAC,UAAU,CAAC,CAAC,OAAO,CAAC,CAAC,GAAG,EAAE,EAAE;QACtC,WAAW,CAAC,GAAG,CAAC,GAAG,EAAE,UAAU,CAAC,GAAU,CAAC,CAAC,CAAC;IAC/C,CAAC,CAAC,CAAC;AACL,CAAC;AAJD,6BAIC"}
